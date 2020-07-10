@@ -9,19 +9,31 @@
   * [License Information](#license-information)
   * [Questions](#Questions)
 
- ## Description 
-GIVEN a command-line application that accepts user input
+## Description 
+This example is showing how the readme is generated.  For more information, refer to this video: https://youtu.be/1DjiS4AXw1o
  ## Installation Instructions 
-THEN this is added to the section of the README entitled Questions, with a link to my GitHub profile
+Get the following packages: /n `npm install fs` /n `npm install util` /n `npm install inquirer``
  ## Usage Information 
-THEN I am taken to the corresponding section of the README
+* Use only if you're creating readme drafts.  If you would like to rename the file, change the variable `fileName` inside the `init()` function on line 159.
  ## Contribution Guidelines 
-Eric Scott's approval and unconditional love <3
+* Go to my contact info in order to contribute to this project
  ## Test Instructions 
-run `$ node index.js` provided the user has node.js installed with the required npm packages (fs, util, inquirer)
+* test on test.js and mark with your name at bottom
 
 ## License Information
-THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM CONSTITUTES RECIPIENT'S ACCEPTANCE OF THIS AGREEMENT.
+Copyright 2020 [name of copyright owner]
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+     
+            http://www.apache.org/licenses/LICENSE-2.0
+     
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
 ## Questions
 ### Contact
 * http://github.com/johnk9000
