@@ -1,4 +1,4 @@
-# Project 
+# Prototype README Generator 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ### Table of Contents
   * [Description](#description)
@@ -9,17 +9,18 @@
   * [Questions](#Questions)
 
  ## Description 
-dasdasdasdas
+This example is showing how the readme is generated.  For more information, refer to this video: 
  ## Installation Instructions 
-dasdsdasdas
+Get the following packages: /n `npm install fs` /n `npm install util` /n `npm install inquirer``
  ## Usage Information 
-dsadasdsadas
+* Use only if you're creating readme drafts.  If you would like to rename the file, change the variable `fileName` inside the `init()` function on line 159.
  ## Contribution Guidelines 
-dadsadadsa
+* Go to my contact info in order to contribute to this project
  ## Test Instructions 
-dsadadsadas
-    ## License Information
-    Copyright 2020 [name of copyright owner]
+* test on test.js and mark with your name at bottom
+
+## License Information
+Copyright 2020 [name of copyright owner]
 
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@ dsadadsadas
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
         limitations under the License.
-    ## Questions
-    ### Contact
-    * http://github.com/johnk9000
-    * johnk9000@gmail.com
+## Questions
+### Contact
+* http://github.com/johnk9000
+* johnk9000@gmail.com

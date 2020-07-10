@@ -162,7 +162,7 @@ async function init() {
         const tableOfCont = tocGen(data);
         const content = readMeBody(data);
         const footer = footerGen(data);
-        let fileName = "README.md"
+        let fileName = "testREADME.md"
         // (Over)writing file name ** remember to change to variable **
         await writeFileAsync(fileName, tableOfCont);
         // Appending Body of README to file

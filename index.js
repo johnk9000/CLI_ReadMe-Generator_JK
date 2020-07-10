@@ -4,41 +4,42 @@ const axios = require("axios");
 const inquirer = require("inquirer");
 const appendFileAsync = util.promisify(fs.appendFile);
 const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
+const year = 2020;
 
-async function getRepos() {
-    inquirer
-    .prompt({
-        message: "Enter your GitHub username",
-        name: "username"
-    })
-    .then(function({ username }) {
-        const queryUrl = `https://api.github.com/users/${username}/repos?per_page=100`;
-        axios.get(queryUrl)
-        .then(function(res) {
-                //console.log(res.data[0]);
-            const repoTitle = res.data.map(repo => repo.title);
-            const repoNames = res.data.map(repo => repo.name);
-            const repoLic = res.data.map(repo => repo.license);
-                //console.log(repoTitle, repoNames, repoLic);
-        })
-    })
-};
+const licenseChoices = [
+    {
+        license: "license-1",
+        name: "Apache 2.0",
+        badgeUrl: `[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)`,
+        clause: `Copyright ` + year + ` [name of copyright owner]
 
-// WHEN I am prompted for information about my application repository
-// THEN a quality, professional README.md is generated with the title of your project and sections entitled Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+     
+            http://www.apache.org/licenses/LICENSE-2.0
+     
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.`,
+    },
+    {
+        license: "license-2",
+        name: "Eclipse",
+        badgeUrl: `[![License](https://img.shields.io/badge/License-EPL%201.0-red.svg)](https://opensource.org/licenses/EPL-1.0)`,
+        clause: `THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM CONSTITUTES RECIPIENT'S ACCEPTANCE OF THIS AGREEMENT.`
+    }
+];
 
-// WHEN I enter my project title
-// THEN this is displayed as the title of the README
-
-
-let count = 0;
-inquirer
-    .prompt([
-     {
+var questions = [
+    {
         type: "input",
         name: "appTitle",
         message: `
-    Welcome to README-GEN v1.0.0 by JK, 
+    Welcome to README-GEN v1.2.4 by JK, 
     May I have the title of your project?
     `,
     },
@@ -77,29 +78,103 @@ inquirer
         message: `
     Enter Test Instructions: 
     `  
+    },
+    {
+        type: "checkbox",
+        name: "license",
+        message:`
+        Choose License Agreement`,
+        choices: [
+            licenseChoices[0].name,
+            licenseChoices[1].name
+        ]
+    },
+    {
+        type: "input",
+        name: "gitHubUser",
+        message: `
+        What is your GitHub Username?
+        `
+    },
+    {
+        type: "input",
+        name: "email",
+        message: `
+        What is your e-mail?
+        `
+    },
+];
+
+function prompt()  {
+
+    return inquirer.prompt(questions);
+}
+
+function readMeBody(data) {
+        console.log('generating body...')
+    // Table of Contents: 
+    return "\n ## Description \n" + data.description + "\n ## Installation Instructions \n" + data.installGuide + "\n ## Usage Information \n" + data.usageInfo + "\n ## Contribution Guidelines \n" + data.contributions + "\n ## Test Instructions \n" + data.testGuide;
+}
+
+function tocGen(data) {
+        console.log('generating header...')
+    let licBadge;
+    if(data.license == licenseChoices[0].name){
+        licBadge = licenseChoices[0].badgeUrl;
+    } else {
+        licBadge = licenseChoices[1].badgeUrl;
     }
-    ]).then(function(data){
-        count++;
-        console.log(data.appTitle);
-        // storing user input for **project Title** and create ReadMe . md
-            // const content = "# " + data.appTitle + "\n ## Description \n" + data.description + "\n ## Installation Instructions \n" + data.installGuide + "\n ## Usage Information \n" + data.usageInfo + "\n ## Contribution Guidelines \n" + data.contributions + "\n ## Test Instructions \n" + data.testGuide;
-            const content = ["# " + data.appTitle,"\n ## Description \n" + data.description, "\n ## Installation Instructions \n" + data.installGuide, "\n ## Usage Information \n" + data.usageInfo, "\n ## Contribution Guidelines \n" + data.contributions, "\n ## Test Instructions \n" + data.testGuide];
+return `# ${data.appTitle} 
+${licBadge}
+### Table of Contents
+  * [Description](#description)
+  * [Installation Instructions](#installation-instructions)
+  * [Usage Information](#usage-information)
+  * [Contribution Guidelines](#contribution-guidelines)
+  * [Test Instructions](#test-instructions)
+  * [License Information](#license-information)
+  * [Questions](#Questions)
+`
+}
 
-            return appendFileAsync("protoREADME-" + count + ".md", JSON.stringify(content.split(',')));
-    }).catch(err => {
-        console.log(err)
-      });
-  
-// THEN this information is added to the sections of the README entitled Description, Installation, Usage, Contributing, and Tests
+function footerGen(data) {
+        console.log('generating footer...')
+    let licClause;
+    if(data.license == licenseChoices[0].name){
+        licClause = licenseChoices[0].clause;
+    } else {
+        licClause = licenseChoices[1].clause;
+    }
+    let gitHubUrl = `http://github.com/${ data.gitHubUser }`
 
-// WHEN I choose a license for my application from a list of options
-// THEN a badge for that license is added hear the top of the README and a notice is added to the section of the README entitled License that explains which license the application is covered under
+    return `
 
-// WHEN I enter my GitHub username
-// THEN this is added to the section of the README entitled Questions, with a link to my GitHub profile
+## License Information
+${ licClause }
+## Questions
+### Contact
+* ${ gitHubUrl }
+* ${ data.email }`
+}
 
-// WHEN I enter my email address
-// THEN this is added to the section of the README entitled Questions, with instructions on how to reach me with additional questions
+async function init() {
+    try {
+        const data = await prompt();
+        console.log("Generating README")
+        const tableOfCont = tocGen(data);
+        const content = readMeBody(data);
+        const footer = footerGen(data);
+        let fileName = "protoREADME.md"
+        // (Over)writing file name ** remember to change to variable **
+        await writeFileAsync(fileName, tableOfCont);
+        // Appending Body of README to file
+        await appendFileAsync(fileName, content);
+        // Appending Footer of REAME to file
+        await appendFileAsync(fileName, footer);
+    } catch(err) {
+        console.log(err);
+    }
+    console.log('created README.md')
+}
 
-// WHEN I click on the links in the Table of Contents
-// THEN I am taken to the corresponding section of the README
+init();
